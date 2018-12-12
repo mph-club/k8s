@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  selector:
+    matchLabels:
+      component: frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: 077003688714.dkr.ecr.us-east-1.amazonaws.com/mphclub_frontend:latest
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: awsecr-cred
