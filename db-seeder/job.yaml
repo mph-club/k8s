@@ -3,9 +3,6 @@ kind: Job
 metadata:
   name: db-seeder-job
 spec:
-  selector:
-    matchLabels:
-      component: db-seeder
   backoffLimit: 5
   template:
     metadata:
