@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-seeder-job
+spec:
+  backoffLimit: 5
+  template:
+    metadata:
+      labels:
+        component: db-seeder
+    spec:
+      containers:
+        - name: db-seeder
+          image: 077003688714.dkr.ecr.us-east-1.amazonaws.com/db_seeder:latest
+          env:
+            - name: AWS_REGION
+              value: us-east-1
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secrets
+                  key: aws_access_key
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secrets
+                  key: aws_secret_key
+            - name: PGUSER
+              value: mphclub
+            - name: PGHOST
+              value: postgres-cluster-ip-service
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: mphclub
+            - name: PGPASSWORD
+              value: mphclub123
+            - name: AWS_BUCKET
+              value: mphclub
+            - name: ASSETS_DIR
+              value: /assets
+      imagePullSecrets:
+        - name: awsecr-cred
+      restartPolicy: Never
